@@ -3,99 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Numerical Reasoning Test</title>
+<title>Numerical Reasoning Assessment</title>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f7fb;
-        margin: 0;
-        padding: 30px;
-        color: #222;
-    }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fa;
+    margin: 0;
+    padding: 30px;
+    color: #1f2937;
+  }
 
-    .container {
-        max-width: 800px;
-        margin: auto;
-        background: white;
-        padding: 35px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+  .container {
+    max-width: 850px;
+    margin: auto;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.09);
+  }
 
-    h1 {
-        text-align: center;
-        color: #17365d;
-        margin-bottom: 5px;
-    }
+  h1 {
+    text-align: center;
+    color: #163a63;
+    margin-bottom: 5px;
+  }
 
-    .subtitle {
-        text-align: center;
-        color: #666;
-        margin-bottom: 30px;
-    }
+  .subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 30px;
+  }
 
-    .question {
-        padding: 20px 0;
-        border-bottom: 1px solid #ddd;
-    }
+  .question {
+    padding: 22px 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
 
-    .question h3 {
-        margin-top: 0;
-        line-height: 1.5;
-    }
+  .question h3 {
+    margin-top: 0;
+    line-height: 1.6;
+    font-size: 17px;
+  }
 
-    label {
-        display: block;
-        padding: 8px 10px;
-        margin: 5px 0;
-        border-radius: 6px;
-        cursor: pointer;
-    }
+  label {
+    display: block;
+    padding: 10px 12px;
+    margin: 7px 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
 
-    label:hover {
-        background-color: #eef4fb;
-    }
+  label:hover {
+    background: #eef5fc;
+    border-color: #8fb5da;
+  }
 
-    input[type="radio"] {
-        margin-right: 10px;
-    }
+  input[type="radio"] {
+    margin-right: 10px;
+  }
 
-    button {
-        display: block;
-        width: 100%;
-        padding: 14px;
-        margin-top: 30px;
-        background-color: #17365d;
-        color: white;
-        border: none;
-        border-radius: 7px;
-        font-size: 17px;
-        font-weight: bold;
-        cursor: pointer;
-    }
+  button {
+    width: 100%;
+    margin-top: 30px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #163a63;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+  }
 
-    button:hover {
-        background-color: #24588f;
-    }
+  button:hover {
+    background: #24598e;
+  }
 
-    #result {
-        display: none;
-        margin-top: 30px;
-        padding: 20px;
-        background-color: #f0f6fc;
-        border-radius: 8px;
-    }
+  #warning {
+    display: none;
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 7px;
+    background: #fff4e5;
+    color: #9a5800;
+    text-align: center;
+  }
 
-    .correct {
-        color: #167c3a;
-        font-weight: bold;
-    }
+  #result {
+    display: none;
+    margin-top: 30px;
+    padding: 25px;
+    background: #f1f7fd;
+    border-radius: 10px;
+  }
 
-    .wrong {
-        color: #c62828;
-        font-weight: bold;
-    }
+  #score {
+    color: #163a63;
+    margin-top: 0;
+  }
+
+  .correct {
+    color: #15803d;
+    font-weight: bold;
+  }
+
+  .wrong {
+    color: #b91c1c;
+    font-weight: bold;
+  }
+
+  .explanation {
+    color: #475569;
+    margin-left: 5px;
+    font-weight: normal;
+  }
 </style>
 </head>
 
@@ -103,157 +127,260 @@
 
 <div class="container">
 
-<h1>Numerical Reasoning Test</h1>
-<p class="subtitle">Speed, Distance & Time and Percentage</p>
+  <h1>Numerical Reasoning Assessment</h1>
+  <p class="subtitle">Speed, Distance & Time • Percentages</p>
 
-<form id="quizForm">
+  <form id="quizForm">
 
-<div class="question">
-    <h3>1. A car travels 150 km in 3 hours. What is its average speed?</h3>
-    <label><input type="radio" name="q1" value="A"> A. 40 km/h</label>
-    <label><input type="radio" name="q1" value="B"> B. 50 km/h</label>
-    <label><input type="radio" name="q1" value="C"> C. 60 km/h</label>
-    <label><input type="radio" name="q1" value="D"> D. 70 km/h</label>
-</div>
+    <div class="question">
+      <h3>1. A vehicle travels 96 km at 48 km/h and then another 132 km at 66 km/h. What is the average speed for the entire journey?</h3>
 
-<div class="question">
-    <h3>2. A bus travels at 60 km/h for 2.5 hours. How far does it travel?</h3>
-    <label><input type="radio" name="q2" value="A"> A. 120 km</label>
-    <label><input type="radio" name="q2" value="B"> B. 140 km</label>
-    <label><input type="radio" name="q2" value="C"> C. 150 km</label>
-    <label><input type="radio" name="q2" value="D"> D. 180 km</label>
-</div>
+      <label><input type="radio" name="q1" value="A"> A. 54.0 km/h</label>
+      <label><input type="radio" name="q1" value="B"> B. 55.5 km/h</label>
+      <label><input type="radio" name="q1" value="C"> C. 57.0 km/h</label>
+      <label><input type="radio" name="q1" value="D"> D. 58.5 km/h</label>
+    </div>
 
-<div class="question">
-    <h3>3. A cyclist travels 45 km at a speed of 15 km/h. How long does the journey take?</h3>
-    <label><input type="radio" name="q3" value="A"> A. 2 hours</label>
-    <label><input type="radio" name="q3" value="B"> B. 2.5 hours</label>
-    <label><input type="radio" name="q3" value="C"> C. 3 hours</label>
-    <label><input type="radio" name="q3" value="D"> D. 4 hours</label>
-</div>
 
-<div class="question">
-    <h3>4. A train travels at 90 km/h. How far will it travel in 30 minutes?</h3>
-    <label><input type="radio" name="q4" value="A"> A. 30 km</label>
-    <label><input type="radio" name="q4" value="B"> B. 40 km</label>
-    <label><input type="radio" name="q4" value="C"> C. 45 km</label>
-    <label><input type="radio" name="q4" value="D"> D. 60 km</label>
-</div>
+    <div class="question">
+      <h3>2. A train is scheduled to cover 270 km in 3 hours. After travelling for 1 hour at 75 km/h, what average speed must it maintain for the remaining journey to arrive exactly on time?</h3>
 
-<div class="question">
-    <h3>5. What is 25% of 240?</h3>
-    <label><input type="radio" name="q5" value="A"> A. 50</label>
-    <label><input type="radio" name="q5" value="B"> B. 60</label>
-    <label><input type="radio" name="q5" value="C"> C. 70</label>
-    <label><input type="radio" name="q5" value="D"> D. 80</label>
-</div>
+      <label><input type="radio" name="q2" value="A"> A. 92.5 km/h</label>
+      <label><input type="radio" name="q2" value="B"> B. 95.0 km/h</label>
+      <label><input type="radio" name="q2" value="C"> C. 97.5 km/h</label>
+      <label><input type="radio" name="q2" value="D"> D. 102.5 km/h</label>
+    </div>
 
-<div class="question">
-    <h3>6. A jacket costs $120. It is on sale with a 20% discount. What is the sale price?</h3>
-    <label><input type="radio" name="q6" value="A"> A. $90</label>
-    <label><input type="radio" name="q6" value="B"> B. $92</label>
-    <label><input type="radio" name="q6" value="C"> C. $96</label>
-    <label><input type="radio" name="q6" value="D"> D. $100</label>
-</div>
 
-<div class="question">
-    <h3>7. There are 80 participants in a programme. If 75% attended, how many participants attended?</h3>
-    <label><input type="radio" name="q7" value="A"> A. 50</label>
-    <label><input type="radio" name="q7" value="B"> B. 55</label>
-    <label><input type="radio" name="q7" value="C"> C. 60</label>
-    <label><input type="radio" name="q7" value="D"> D. 65</label>
-</div>
+    <div class="question">
+      <h3>3. Two cyclists start from the same point and travel in opposite directions. Cyclist A travels at 24 km/h and Cyclist B at 32 km/h. After how long will they be 126 km apart?</h3>
 
-<div class="question">
-    <h3>8. The price of an item increases from $80 to $100. What is the percentage increase?</h3>
-    <label><input type="radio" name="q8" value="A"> A. 20%</label>
-    <label><input type="radio" name="q8" value="B"> B. 25%</label>
-    <label><input type="radio" name="q8" value="C"> C. 30%</label>
-    <label><input type="radio" name="q8" value="D"> D. 35%</label>
-</div>
+      <label><input type="radio" name="q3" value="A"> A. 2 hours 5 minutes</label>
+      <label><input type="radio" name="q3" value="B"> B. 2 hours 10 minutes</label>
+      <label><input type="radio" name="q3" value="C"> C. 2 hours 15 minutes</label>
+      <label><input type="radio" name="q3" value="D"> D. 2 hours 20 minutes</label>
+    </div>
 
-<button type="button" onclick="submitQuiz()">Submit Answers</button>
 
-</form>
+    <div class="question">
+      <h3>4. A driver increases his speed from 72 km/h to 90 km/h. For a journey that originally took 2 hours 30 minutes, how much travelling time is saved if the distance remains unchanged?</h3>
 
-<div id="result">
+      <label><input type="radio" name="q4" value="A"> A. 24 minutes</label>
+      <label><input type="radio" name="q4" value="B"> B. 27 minutes</label>
+      <label><input type="radio" name="q4" value="C"> C. 30 minutes</label>
+      <label><input type="radio" name="q4" value="D"> D. 36 minutes</label>
+    </div>
+
+
+    <div class="question">
+      <h3>5. An electronic device has a marked price of $480. A 15% discount is applied, followed by an additional 10% discount on the reduced price. What is the final price?</h3>
+
+      <label><input type="radio" name="q5" value="A"> A. $360.00</label>
+      <label><input type="radio" name="q5" value="B"> B. $367.20</label>
+      <label><input type="radio" name="q5" value="C"> C. $372.00</label>
+      <label><input type="radio" name="q5" value="D"> D. $374.40</label>
+    </div>
+
+
+    <div class="question">
+      <h3>6. A product's price is increased by 20%. The new price is then reduced by 20%. If the original price was $750, what is the final price?</h3>
+
+      <label><input type="radio" name="q6" value="A"> A. $720</label>
+      <label><input type="radio" name="q6" value="B"> B. $735</label>
+      <label><input type="radio" name="q6" value="C"> C. $750</label>
+      <label><input type="radio" name="q6" value="D"> D. $780</label>
+    </div>
+
+
+    <div class="question">
+      <h3>7. In an assessment, a candidate answers 72% of the first 200 questions correctly and 84% of the next 100 questions correctly. What percentage of all 300 questions did the candidate answer correctly?</h3>
+
+      <label><input type="radio" name="q7" value="A"> A. 74%</label>
+      <label><input type="radio" name="q7" value="B"> B. 75%</label>
+      <label><input type="radio" name="q7" value="C"> C. 76%</label>
+      <label><input type="radio" name="q7" value="D"> D. 78%</label>
+    </div>
+
+
+    <div class="question">
+      <h3>8. After receiving a 12% discount, a customer pays $616 for an item. What was the item's original price?</h3>
+
+      <label><input type="radio" name="q8" value="A"> A. $680</label>
+      <label><input type="radio" name="q8" value="B"> B. $690</label>
+      <label><input type="radio" name="q8" value="C"> C. $700</label>
+      <label><input type="radio" name="q8" value="D"> D. $720</label>
+    </div>
+
+
+    <button type="button" onclick="submitQuiz()">Submit Answers</button>
+
+    <div id="warning">
+      Please answer all 8 questions before submitting.
+    </div>
+
+  </form>
+
+
+  <div id="result">
     <h2 id="score"></h2>
     <div id="answers"></div>
-</div>
+  </div>
 
 </div>
+
 
 <script>
 
 function submitQuiz() {
 
-    const correctAnswers = {
-        q1: "B",
-        q2: "C",
-        q3: "C",
-        q4: "C",
-        q5: "B",
-        q6: "C",
-        q7: "C",
-        q8: "B"
-    };
+  const correctAnswers = {
+    q1: "C",
+    q2: "C",
+    q3: "C",
+    q4: "C",
+    q5: "B",
+    q6: "A",
+    q7: "C",
+    q8: "C"
+  };
 
-    const explanations = {
-        q1: "50 km/h",
-        q2: "150 km",
-        q3: "3 hours",
-        q4: "45 km",
-        q5: "60",
-        q6: "$96",
-        q7: "60 participants",
-        q8: "25%"
-    };
+  const answerText = {
+    q1: "57.0 km/h",
+    q2: "97.5 km/h",
+    q3: "2 hours 15 minutes",
+    q4: "30 minutes",
+    q5: "$367.20",
+    q6: "$720",
+    q7: "76%",
+    q8: "$700"
+  };
 
-    let score = 0;
-    let output = "<h3>Answer Review</h3>";
+  const explanations = {
+    q1: "Total distance = 228 km. Total time = 2 + 2 = 4 hours. Average speed = 228 ÷ 4 = 57 km/h.",
+    
+    q2: "In the first hour, the train covers 75 km. Remaining distance = 195 km and remaining time = 2 hours. Required speed = 195 ÷ 2 = 97.5 km/h.",
+    
+    q3: "Their combined separation speed is 24 + 32 = 56 km/h. Time = 126 ÷ 56 = 2.25 hours, which is 2 hours 15 minutes.",
+    
+    q4: "Original distance = 72 × 2.5 = 180 km. At 90 km/h, the journey takes 2 hours. Therefore, 30 minutes are saved.",
+    
+    q5: "After the first discount: $480 × 0.85 = $408. After the second discount: $408 × 0.90 = $367.20.",
+    
+    q6: "After the increase: $750 × 1.20 = $900. After the 20% reduction: $900 × 0.80 = $720.",
+    
+    q7: "Correct answers = 72% of 200 + 84% of 100 = 144 + 84 = 228. Percentage = 228 ÷ 300 × 100 = 76%.",
+    
+    q8: "After a 12% discount, the customer pays 88% of the original price. Original price = $616 ÷ 0.88 = $700."
+  };
 
-    for (let i = 1; i <= 8; i++) {
 
-        const question = "q" + i;
-        const selected = document.querySelector(
-            'input[name="' + question + '"]:checked'
-        );
+  let score = 0;
+  let allAnswered = true;
 
-        if (selected && selected.value === correctAnswers[question]) {
-            score++;
 
-            output +=
-                '<p class="correct">Question ' + i +
-                ': Correct ✓ | Answer: ' +
-                correctAnswers[question] + '. ' +
-                explanations[question] + '</p>';
+  for (let i = 1; i <= 8; i++) {
 
-        } else {
+    const selected = document.querySelector(
+      'input[name="q' + i + '"]:checked'
+    );
 
-            const selectedAnswer = selected ? selected.value : "Not answered";
-
-            output +=
-                '<p class="wrong">Question ' + i +
-                ': Incorrect ✗ | Your answer: ' +
-                selectedAnswer +
-                ' | Correct answer: ' +
-                correctAnswers[question] + '. ' +
-                explanations[question] + '</p>';
-        }
+    if (!selected) {
+      allAnswered = false;
+      break;
     }
+  }
 
-    const percentage = Math.round((score / 8) * 100);
 
-    document.getElementById("score").innerHTML =
-        "Your Score: " + score + " / 8 (" + percentage + "%)";
+  if (!allAnswered) {
 
-    document.getElementById("answers").innerHTML = output;
+    document.getElementById("warning").style.display = "block";
 
-    document.getElementById("result").style.display = "block";
-
-    document.getElementById("result").scrollIntoView({
-        behavior: "smooth"
+    document.getElementById("warning").scrollIntoView({
+      behavior: "smooth"
     });
+
+    return;
+  }
+
+
+  document.getElementById("warning").style.display = "none";
+
+  let output = "<h3>Answer Review</h3>";
+
+
+  for (let i = 1; i <= 8; i++) {
+
+    const question = "q" + i;
+
+    const selected = document.querySelector(
+      'input[name="' + question + '"]:checked'
+    );
+
+    if (selected.value === correctAnswers[question]) {
+
+      score++;
+
+      output +=
+        '<p class="correct">' +
+        'Question ' + i + ': Correct ✓' +
+        '<br><span class="explanation">Correct Answer: ' +
+        correctAnswers[question] + '. ' +
+        answerText[question] +
+        '<br>' +
+        explanations[question] +
+        '</span></p>';
+
+    } else {
+
+      output +=
+        '<p class="wrong">' +
+        'Question ' + i + ': Incorrect ✗' +
+        '<br><span class="explanation">' +
+        'Your Answer: ' + selected.value +
+        '<br>Correct Answer: ' +
+        correctAnswers[question] + '. ' +
+        answerText[question] +
+        '<br>' +
+        explanations[question] +
+        '</span></p>';
+    }
+  }
+
+
+  const percentage = Math.round((score / 8) * 100);
+
+  let performance = "";
+
+  if (score >= 7) {
+    performance = "Excellent";
+  } else if (score >= 5) {
+    performance = "Good";
+  } else if (score >= 3) {
+    performance = "Fair";
+  } else {
+    performance = "Needs Improvement";
+  }
+
+
+  document.getElementById("score").innerHTML =
+    "Your Score: " +
+    score +
+    " / 8 (" +
+    percentage +
+    "%)<br><small>Performance: " +
+    performance +
+    "</small>";
+
+
+  document.getElementById("answers").innerHTML = output;
+
+  document.getElementById("result").style.display = "block";
+
+
+  document.getElementById("result").scrollIntoView({
+    behavior: "smooth"
+  });
+
 }
 
 </script>
