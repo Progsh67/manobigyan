@@ -1,303 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuantumGrid Inventory System</title>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --success: #16a34a;
-            --dark: #0f172a;
-            --light: #f8fafc;
-            --border: #e2e8f0;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f1f5f9;
-            color: var(--dark);
-        }
-
-        .navbar {
-            background-color: var(--dark);
-            color: white;
-            padding: 1rem 2rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .container { grid-template-columns: 1fr; }
-        }
-
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
-        }
-
-        h2 {
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 0.5rem;
-            font-size: 1.25rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.65rem;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            transition: border 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        button {
-            width: 100%;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover { background-color: var(--primary-hover); }
-
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-            margin-top: 1rem;
-        }
-
-        .search-box {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .search-box input {
-            flex: 1;
-        }
-
-        .search-box button {
-            width: auto;
-            padding: 0.65rem 1.5rem;
-        }
-
-        .result-display {
-            background-color: var(--light);
-            border: 1px dashed var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            min-height: 150px;
-        }
-
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .data-row:last-child { border-bottom: none; }
-        .data-label { font-weight: 600; color: #64748b; }
-        
-        .alert {
-            padding: 0.75rem;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-            font-weight: 500;
-            display: none;
-        }
-        .alert-success { background-color: #dcfce7; color: #15803d; }
-        .alert-danger { background-color: #fee2e2; color: #b91c1c; }
-    </style>
-</head>
-<body>
-
-    <div class="navbar">🌐 QuantumGrid Inventory Manager</div>
-
-    <div class="container">
-        <div class="card">
-            <h2>📥 Log New Transaction</h2>
-            <div id="form-alert" class="alert alert-success">Item recorded successfully!</div>
-            
-            <form id="inventory-form">
-                <div class="form-group">
-                    <label for="txId">Transaction ID</label>
-                    <input type="text" id="txId" required placeholder="e.g., TXN-1001">
-                </div>
-                <div class="form-group">
-                    <label for="itemName">Item Name</label>
-                    <input type="text" id="itemName" required placeholder="e.g., Laptop, Office Chair">
-                </div>
-                <div class="form-group">
-                    <label for="qty">Quantity</label>
-                    <input type="number" id="qty" required min="1" placeholder="0">
-                </div>
-                <div class="form-group">
-                    <label for="issuedBy">Issued By</label>
-                    <input type="text" id="issuedBy" required placeholder="Your Name">
-                </div>
-                <div class="form-group">
-                    <label for="issuedTo">Issued To</label>
-                    <input type="text" id="issuedTo" required placeholder="Receiver's Name">
-                </div>
-                <div class="form-group">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" required>
-                </div>
-                
-                <button type="submit" class="btn-primary">Add Item to Log</button>
-            </form>
-
-            <button class="btn-success" onclick="exportToExcel()">📥 Download data as Excel (.xlsx)</button>
-        </div>
-
-        <div class="card">
-            <h2>🔍 Search Records by Transaction ID</h2>
-            <div class="search-box">
-                <input type="text" id="searchId" placeholder="Enter Transaction ID...">
-                <button class="btn-primary" onclick="searchTransaction()">Search</button>
-            </div>
-
-            <div class="result-display" id="search-result">
-                <p style="color: #64748b; text-align: center; margin-top: 3rem;">Search a valid Transaction ID to show details.</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Set default date to today
-        document.getElementById('date').valueAsDate = new Date();
-
-        // Core data storage array. Loads saved entries or defaults to blank.
-        let inventoryData = JSON.parse(localStorage.getItem('inventory_records')) || [];
-
-        // Add Item logic
-        document.getElementById('inventory-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const txId = document.getElementById('txId').value.trim();
-            
-            // Validation: Make sure transaction ID is unique
-            if (inventoryData.some(item => item["Transaction ID"].toLowerCase() === txId.toLowerCase())) {
-                showAlert('form-alert', 'Error: This Transaction ID already exists!', 'danger');
-                return;
-            }
-
-            // Construct spreadsheet row format object
-            const newRecord = {
-                "Transaction ID": txId,
-                "Item Name": document.getElementById('itemName').value.trim(),
-                "Quantity": parseInt(document.getElementById('qty').value),
-                "Issued By": document.getElementById('issuedBy').value.trim(),
-                "Issued To": document.getElementById('issuedTo').value.trim(),
-                "Date": document.getElementById('date').value
-            };
-
-            // Save records
-            inventoryData.push(newRecord);
-            localStorage.setItem('inventory_records', JSON.stringify(inventoryData));
-
-            // Reset UI and show success confirmation
-            document.getElementById('inventory-form').reset();
-            document.getElementById('date').valueAsDate = new Date();
-            showAlert('form-alert', 'Transaction logged successfully!', 'success');
-        });
-
-        // Search engine logic
-        function searchTransaction() {
-            const searchId = document.getElementById('searchId').value.trim().toLowerCase();
-            const resultBox = document.getElementById('search-result');
-
-            if (!searchId) {
-                resultBox.innerHTML = `<p style="color: #b91c1c; text-align: center; margin-top: 3rem;">Please enter an ID.</p>`;
-                return;
-            }
-
-            const found = inventoryData.find(item => item["Transaction ID"].toLowerCase() === searchId);
-
-            if (found) {
-                resultBox.innerHTML = `
-                    <div class="data-row"><span class="data-label">Transaction ID:</span> <span>${found["Transaction ID"]}</span></div>
-                    <div class="data-row"><span class="data-label">Item Name:</span> <span>${found["Item Name"]}</span></div>
-                    <div class="data-row"><span class="data-label">Quantity:</span> <span>${found["Quantity"]}</span></div>
-                    <div class="data-row"><span class="data-label">Issued By:</span> <span>${found["Issued By"]}</span></div>
-                    <div class="data-row"><span class="data-label">Issued To:</span> <span>${found["Issued To"]}</span></div>
-                    <div class="data-row"><span class="data-label">Date:</span> <span>${found["Date"]}</span></div>
-                `;
-            } else {
-                resultBox.innerHTML = `<p style="color: #b91c1c; text-align: center; margin-top: 3rem;">❌ Transaction ID not found.</p>`;
-            }
-        }
-
-        // Native Excel Exporter (.xlsx parser function via SheetJS)
-        function exportToExcel() {
-            if (inventoryData.length === 0) {
-                alert("There are no records to export yet!");
-                return;
-            }
-            
-            // Compiles data matrix to an Excel workbook structure
-            const worksheet = XLSX.utils.json_to_sheet(inventoryData);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Inventory Log");
-            
-            // Triggers file download window
-            XLSX.writeFile(workbook, "Inventory_Report.xlsx");
-        }
-
-        function showAlert(id, text, type) {
-            const alertBox = document.getElementById(id);
-            alertBox.textContent = text;
-            alertBox.className = `alert alert-${type}`;
-            alertBox.style.display = 'block';
-            setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
-        }
-    </script>
-</body>
-</html>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PAC Advanced Logical Reasoning Challenge</title>
+<style>
+:root{--bg:#07111f;--card:#101c2e;--line:#2a3850;--text:#f8fafc;--muted:#9fb0c8;--accent:#6366f1;--cyan:#22d3ee;--green:#10b981;--red:#f43f5e}*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at top right,#312e8166,transparent 35%),var(--bg);color:var(--text);min-height:100vh}.wrap{width:min(960px,94%);margin:auto;padding:28px 0}.card{background:#0f1b2dcc;border:1px solid #ffffff18;border-radius:24px;padding:clamp(22px,4vw,42px);box-shadow:0 24px 70px #0008}.hero{min-height:88vh;display:grid;place-items:center}.badge{display:inline-block;padding:9px 14px;border-radius:999px;background:#6366f122;color:#c7d2fe;font-weight:700}.title{font-size:clamp(2.3rem,7vw,4.8rem);line-height:1.02;margin:20px 0;background:linear-gradient(90deg,#fff,#818cf8,#67e8f9);-webkit-background-clip:text;color:transparent}.sub{font-size:1.1rem;color:var(--muted);line-height:1.7}.credit{margin-top:22px;color:#cbd5e1}.btn{border:0;border-radius:13px;padding:14px 20px;color:white;background:var(--accent);font-weight:800;font-size:1rem;cursor:pointer}.btn:hover{filter:brightness(1.12)}.btn:disabled{opacity:.35;cursor:not-allowed}.top{display:flex;justify-content:space-between;gap:18px;align-items:center}.score{color:#6ee7b7;font-weight:900}.progress{height:10px;background:#1e293b;border-radius:99px;overflow:hidden;margin:18px 0 28px}.bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:.35s}.meta{display:flex;justify-content:space-between;color:#a5b4fc;font-weight:800}.visual{display:flex;gap:12px;align-items:center;overflow-x:auto;background:white;padding:20px;border:4px solid #334155;border-radius:18px;margin:22px 0}.tile{min-width:74px;height:76px;padding:8px;border:2px solid #cbd5e1;border-radius:12px;display:grid;place-items:center;color:#0f172a;background:#f8fafc;font-size:27px;font-weight:900;white-space:nowrap}.arrow{color:#94a3b8;font-size:25px}.question{font-size:clamp(1.35rem,3vw,2rem);line-height:1.35}.options{display:grid;gap:12px;margin-top:26px}.option{width:100%;text-align:left;padding:16px;border-radius:14px;border:1px solid var(--line);background:#17243a;color:white;font-size:1rem;cursor:pointer}.option:hover{border-color:#818cf8}.option.correct{background:#064e3b88;border-color:var(--green)}.option.wrong{background:#88133788;border-color:var(--red)}.feedback{margin-top:18px;padding:16px;border-radius:13px;border:1px solid}.feedback.good{background:#064e3b66;border-color:var(--green)}.feedback.bad{background:#88133766;border-color:var(--red)}.nav{display:flex;justify-content:space-between;margin-top:26px}.results{text-align:center}.big{font-size:4rem;font-weight:950;color:#67e8f9;margin:8px}.breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:25px 0}.mini{padding:18px;background:#ffffff0a;border:1px solid #ffffff18;border-radius:16px}@media(max-width:650px){.breakdown{grid-template-columns:1fr}.top,.meta{align-items:flex-start}.visual{padding:12px}.tile{min-width:60px;height:64px;font-size:22px}}
+</style>
+</head><body><div id="app"></div>
+<script>
+const N=(q,o,a,e)=>({category:'Numerical',q,options:o,answer:a,explanation:e});
+const A=(v,q,o,a,e)=>({category:'Abstract',visual:v,q,options:o,answer:a,explanation:e});
+const V=(q,o,a,e)=>({category:'Verbal',q,options:o,answer:a,explanation:e});
+const questions=[
+N('A number is increased by 20%, then reduced by 20%. The final value is 192. What was the original number?',['196','200','204','208'],1,'0.96x = 192, therefore x = 200.'),
+N('Find the next number: 2, 6, 15, 31, 56, ?',['82','88','92','96'],2,'The differences are 4, 9, 16, 25 and 36.'),
+N('A finishes a task in 12 days and B in 18 days. After working together for 4 days, what fraction remains?',['1/9','4/9','5/9','7/9'],1,'Together they finish 5/36 daily, so 4/9 remains.'),
+N('The average of six numbers is 24. After one is removed, the average is 21. What number was removed?',['35','37','39','41'],2,'144 minus 105 equals 39.'),
+N('If x:y = 3:4 and y:z = 6:5, what is x:z?',['9:10','8:15','18:25','3:5'],0,'Use a common y: 9:12 and 12:10, giving 9:10.'),
+N('A two-digit number is four times its digit sum. Reversing it increases it by 18. Find it.',['24','36','42','48'],0,'24 = 4(2+4), and 42−24=18.'),
+N('Smallest positive integer leaving remainder 2 when divided by 5 and remainder 4 when divided by 7?',['18','24','32','39'],2,'32 mod 5=2 and 32 mod 7=4.'),
+N('Complete: 1, 2, 6, 21, 88, ?',['352','440','445','452'],2,'Multiply by 1,2,3,4,5 and add the same multiplier.'),
+N('A 180 m train passes a pole in 12 s and a platform in 30 s. Platform length?',['240 m','270 m','300 m','360 m'],1,'Speed is 15 m/s; total distance is 450 m, less 180 m.'),
+N('If 2^x × 4^(x−1) = 128, find x.',['2','3','4','5'],1,'2^(3x−2)=2^7, so x=3.'),
+N('Counters are in ratio 5:3:2. Removing 4 red changes it to 3:3:2. Original total?',['10','20','30','40'],1,'5k−4=3k, so k=2 and total=20.'),
+N('Compound interest on $5,000 at 10% annually for 2 years?',['$1,000','$1,025','$1,050','$1,100'],2,'5000(1.1)^2−5000 = 1050.'),
+N('Replace ?: 7, 10, 8, 11, 9, 12, ?',['10','11','13','15'],0,'Two interleaved sequences increase by one.'),
+N('A clock gains 5 minutes every 3 hours. Correct at 8 am, what does it show at actual 8 pm?',['8:15 pm','8:20 pm','8:25 pm','8:30 pm'],1,'Twelve hours gives four gains of 5 minutes.'),
+N('P(A)=0.7 and P(B)=0.6 independently. Probability of passing exactly one?',['0.18','0.28','0.42','0.46'],3,'0.7×0.4 + 0.3×0.6 = 0.46.'),
+N('Rectangle perimeter is 70 cm; length is 5 cm more than twice width. Area?',['200 cm²','225 cm²','250 cm²','275 cm²'],2,'Width=10, length=25, area=250.'),
+N('Find ?: 4, 18, 48, 100, 180, ?',['252','276','294','306'],2,'Use n(n+1)²; 6×7²=294.'),
+A(['▲','▶','▼','◀','▲','?'],'Which symbol replaces the question mark?',['▶','▼','◀','◆'],0,'The triangle rotates 90° clockwise.'),
+A(['●○○','○●○','○○●','○●○','?'],'The filled circle oscillates. What comes next?',['●○○','○○●','●●○','○○○'],0,'It moves left, centre, right, centre, left.'),
+A(['△','■■','○○○','△△△△','?'],'Continue both shape and quantity cycles.',['■■■■■','○○○○○','△△△△△','■■■■'],0,'Shapes cycle triangle, square, circle; count rises.'),
+A(['↗•','•↘','↙•','•↖','?'],'Track arrow rotation and dot position.',['↗•','•↗','↘•','•↙'],0,'Arrow rotates clockwise and dot alternates sides.'),
+A(['□','▣','■','▣','□','?'],'Complete the reflected fill pattern.',['▣','■','□','◇'],0,'The sequence mirrors around the filled square.'),
+A(['▲○','▶●','▼○','◀●','?'],'Track rotation and alternating fill.',['▲○','▲●','▶○','▼●'],0,'Triangle rotates; circle alternates outline and filled.'),
+A(['└','┌','┐','┘','└','?'],'Which corner follows?',['┌','┐','┘','└'],0,'The corner rotates through four orientations.'),
+A(['◆','◇◇','◆◆◆','◇◇◇◇','?'],'Which group continues both rules?',['◆◆◆◆◆','◇◇◇◇◇','◆◆◆◆','◇◇◇◇◇◇'],0,'Count increases and fill alternates.'),
+A(['↑○','→○○','↓○○○','←○○○○','?'],'Continue direction and quantity.',['↑○○○○○','→○○○○○','↑●●●●●','↓○○○○○'],0,'Arrow rotates clockwise and a circle is added.'),
+A(['A▲1','C■2','F●3','J▲4','?'],'Letters, numbers and shapes follow different rules.',['O■5','N■5','O●5','P■6'],0,'Letter jumps +2,+3,+4,+5; shapes cycle; numbers rise.'),
+A(['◐','◓','◑','◒','?'],'Which shaded circle follows?',['◐','◑','◒','◓'],0,'The shaded half rotates 90° each step.'),
+A(['△□','□○','○◇','◇△','?'],'Continue the overlapping pair cycle.',['△□','△○','□◇','◇□'],0,'The second shape becomes the first of the next pair.'),
+A(['1▲','2▶▶','3▼▼▼','4◀◀◀◀','?'],'Continue label, quantity and direction.',['5▲▲▲▲▲','5▶▶▶▶▶','4▲▲▲▲▲','5▼▼▼▼▼'],0,'All counts rise while direction rotates clockwise.'),
+A(['●□□','□●□','□□●','□●□','?'],'Complete the oscillating movement.',['●□□','□□●','●●□','□□□'],0,'The filled position moves right, then back left.'),
+A(['▲■','■●','●◆','◆▲','?'],'Continue the ordered-pair cycle.',['▲■','▲●','■◆','◆■'],0,'Pairs follow consecutive shapes in a four-shape cycle.'),
+A(['⊕','⊗','⊙','⊕','⊗','?'],'Continue the composite-symbol cycle.',['⊙','⊕','⊗','○'],0,'The three symbols repeat.'),
+A(['▲','▼▼','▲▲▲','▼▼▼▼','?'],'Continue orientation and quantity.',['▲▲▲▲▲','▼▼▼▼▼','▲▲▲▲','▶▶▶▶▶'],0,'Count rises and orientation alternates.'),
+V('All analysts are methodical. No impulsive person is methodical. Some investigators are analysts. What follows?',['No investigator is impulsive','Some investigators are not impulsive','All investigators are methodical','Some impulsive people are analysts'],1,'Those investigators who are analysts are methodical and not impulsive.'),
+V('Blueprint : Building has the closest relationship to:',['Recipe : Meal','Judge : Court','Compass : North','Author : Book'],0,'Both are plans or instructions for producing an outcome.'),
+V('Which word most nearly means “equivocal”?',['Unambiguous','Ambiguous','Hostile','Unnecessary'],1,'Equivocal means unclear or open to multiple interpretations.'),
+V('Best opposite of “mitigate”?',['Alleviate','Aggravate','Postpone','Measure'],1,'Mitigate reduces severity; aggravate increases it.'),
+V('Equivalent to “No reliable witness is inconsistent”:',['All inconsistent witnesses are unreliable','Some reliable witnesses are inconsistent','All unreliable witnesses are inconsistent','No witness can be reliable'],0,'This is the valid contrapositive.'),
+V('Opaque is to transparent as taciturn is to:',['Reserved','Talkative','Uncertain','Thoughtful'],1,'Both pairs are opposites.'),
+V('Arrange logically: 1 evidence verified; 2 allegation received; 3 action followed; 4 records gathered.',['2-4-1-3','4-2-1-3','2-1-4-3','1-2-3-4'],0,'Receive, gather, verify, then act.'),
+V('All P are Q. Some Q are R. No R is S. What is guaranteed?',['Some P are R','No P is S','Some Q are not S','All Q are P'],2,'Some Q are R, and no R is S.'),
+V('Choose the most precise sentence.',['The officer nearly reviewed every file.','The officer reviewed nearly every file.','Nearly the officer reviewed every file.','The officer reviewed every nearly file.'],1,'It clearly means most, but not all, files.'),
+V('Required assumption: “Online timeslot booking will reduce queues.”',['All applicants own computers','Bookings will distribute arrivals more effectively','All walk-ins will end','Staff numbers will double'],1,'Queue reduction depends on spreading arrivals.'),
+V('The evidence was persuasive but not ____; further verification remained necessary.',['conclusive','relevant','available','complex'],0,'Conclusive evidence would settle the matter.'),
+V('“Prudent” most nearly means:',['Cautious and sensible','Bold and reckless','Quick and temporary','Rigid and inflexible'],0,'Prudent means exercising sound caution.'),
+V('Which argument is faulty?',['The alarm sounded, so it should be checked.','Two successful students used this method, so it guarantees success.','A rule applies to all applicants; Mina is one, so it applies to her.','Data are incomplete, so the conclusion is provisional.'],1,'It generalises from two cases and claims certainty.'),
+V('Erode : Rock is closest to:',['Corrode : Metal','Polish : Glass','Fold : Paper','Measure : Distance'],0,'Both verbs describe gradual wearing away.'),
+V('Some A are B, all B are C, and no C are D. What must be true?',['Some A are not D','All A are C','No A are D','Some D are not A'],0,'The A that are B are C and therefore not D.'),
+V('What most weakens: “Longer library hours caused improved exam results”?',['Library hired assistants','The exam was substantially easier','More students visited','New chairs were added'],1,'An easier exam is a strong alternative cause.')
+];
+let current=0,answers={},started=false,finished=false;
+const app=document.getElementById('app');
+function score(){return Object.entries(answers).filter(([i,a])=>questions[i].answer===a).length}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function start(){started=true;render()} function reset(){current=0;answers={};started=false;finished=false;render()}
+function choose(i){if(answers[current]!==undefined)return;answers[current]=i;render()}
+function go(n){current=n;render()} function finish(){finished=true;render()}
+function categoryScore(c){const ids=questions.map((q,i)=>q.category===c?i:-1).filter(i=>i>=0);return [ids.filter(i=>answers[i]===questions[i].answer).length,ids.length]}
+function visual(v){if(!v)return'';return `<div class="visual">${v.map((x,i)=>`<div class="tile">${esc(x)}</div>${i<v.length-1?'<div class="arrow">›</div>':''}`).join('')}</div>`}
+function render(){
+ if(!started){app.innerHTML=`<main class="hero"><div class="wrap"><section class="card"><span class="badge">PAC Student Preparation Series</span><h1 class="title">PAC Advanced Logical Reasoning Challenge</h1><p class="sub">Test advanced numerical, abstract and verbal reasoning through 50 interactive questions with immediate explanations and visual pattern challenges.</p><p class="credit">Prepared by <strong>Manobigyan Shreesh</strong></p><button class="btn" onclick="start()">Start Assessment →</button></section></div></main>`;return}
+ if(finished){const s=score(),p=Math.round(s/questions.length*100);app.innerHTML=`<main class="hero"><div class="wrap"><section class="card results"><div style="font-size:62px">🏆</div><h1>Assessment Complete</h1><div class="big">${s} / ${questions.length}</div><h2>${p}%</h2><p class="sub">${p>=80?'Excellent advanced reasoning performance.':p>=60?'Good performance. Review the explanations and retry difficult areas.':'Continue practising, especially your lowest-scoring section.'}</p><div class="breakdown">${['Numerical','Abstract','Verbal'].map(c=>{let x=categoryScore(c);return`<div class="mini"><b>${c}</b><h2>${x[0]} / ${x[1]}</h2></div>`}).join('')}</div><button class="btn" onclick="reset()">↻ Try Again</button><p class="credit">PAC Advanced Logical Reasoning Challenge • Prepared by Manobigyan Shreesh</p></section></div></main>`;return}
+ const q=questions[current],sel=answers[current],done=sel!==undefined;
+ app.innerHTML=`<div class="wrap"><div class="top"><div><b>PAC Advanced Logical Reasoning Challenge</b><div class="sub" style="font-size:.8rem">Prepared by Manobigyan Shreesh</div></div><div><div class="score">Correct: ${score()}</div><small>Answered: ${Object.keys(answers).length}/${questions.length}</small></div></div><div class="progress"><div class="bar" style="width:${(current+1)/questions.length*100}%"></div></div><section class="card"><div class="meta"><span>${q.category} Reasoning • Advanced</span><span>Question ${current+1} of ${questions.length}</span></div>${visual(q.visual)}<h2 class="question">${esc(q.q)}</h2><div class="options">${q.options.map((o,i)=>`<button class="option ${done&&i===q.answer?'correct':''} ${done&&i===sel&&i!==q.answer?'wrong':''}" onclick="choose(${i})"><b>${String.fromCharCode(65+i)}.</b> ${esc(o)} ${done&&i===q.answer?' ✓':''}${done&&i===sel&&i!==q.answer?' ✕':''}</button>`).join('')}</div>${done?`<div class="feedback ${sel===q.answer?'good':'bad'}"><b>${sel===q.answer?'Correct! Well done.':'Incorrect. Correct answer highlighted.'}</b><div style="margin-top:6px">${esc(q.explanation)}</div></div>`:''}<div class="nav"><button class="btn" onclick="go(${current-1})" ${current===0?'disabled':''}>← Previous</button>${current<questions.length-1?`<button class="btn" onclick="go(${current+1})" ${!done?'disabled':''}>Next →</button>`:`<button class="btn" onclick="finish()" ${Object.keys(answers).length<questions.length?'disabled':''}>View Final Score</button>`}</div></section></div>`}
+render();
+</script></body></html>
