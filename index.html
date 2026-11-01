@@ -136,7 +136,6 @@ const BANK = [
 ["Abstract","The sequence repeats in a cycle:\n1st: ▲■●   2nd: ■●▲   3rd: ●▲■   4th: ▲■●   …\nWhat is the 10th term?",["▲■●","■●▲","●▲■","▲●■"]],
 ["Abstract","Rules:\n(1) ▲ is always immediately followed by ■.\n(2) ■ is never immediately followed by ●.\nWhich sequence is possible?",["▲ ■ ▲ ■","▲ ● ■","■ ● ▲","▲ ■ ●"]],
 ["Abstract","A dot starts at the top-left corner of a square. It moves clockwise around the corners: first 1 corner, then 2, then 3, then 4. Where is it after the 4th move?",["Bottom-right","Top-left","Top-right","Bottom-left"]],
-→","↑"]],
 
 // ---------- VERBAL (18) ----------
 ["Verbal","Choose the word closest in meaning to HAPPY.",["Joyful","Sad","Angry","Tired"]],
@@ -147,7 +146,7 @@ const BANK = [
 ["Verbal","All students are learners. Some learners are athletes.\nConclusion: All students are athletes.",["Cannot be determined","Definitely true","Definitely false","Always true for athletes"]],
 ["Verbal","All birds have wings. A penguin is a bird.\nConclusion: A penguin has wings.",["True","False","Cannot be determined","Only some penguins"]],
 ["Verbal","Choose the opposite of GENEROUS.",["Stingy","Kind","Giving","Noble"]],
-["Verbal","Which word is an anagram of LISTEN?",["SILENT","TINSEL-S","LISTED","LENTIL"]],
+["Verbal","Which word is an anagram of LISTEN?",["SILENT","LISTED","LENTIL","SILENCE"]],
 ["Verbal","Which is the odd one out?",["Sleep","Run","Walk","Jog"]],
 ["Verbal","Cold : Hot :: Up : ?",["Down","High","Over","Top"]],
 ["Verbal","Tom is taller than Sam. Sam is taller than Ravi. Who is the shortest?",["Ravi","Sam","Tom","Cannot be determined"]],
@@ -158,9 +157,6 @@ const BANK = [
 ["Verbal","Choose the word closest in meaning to RAPID.",["Swift","Slow","Steady","Weak"]],
 ["Verbal","A stitch in time saves ___.",["nine","ten","two","money"]]
 ];
-
-// Fix typo-proof: replace odd anagram distractor
-BANK.forEach(q=>{ if(q[2][1]==="TINSEL-S") q[2][1]="ENLIST-ED"; });
 
 let qs=[], idx=0, right=0, wrong=0, answered=false, stats={};
 
@@ -203,6 +199,7 @@ function showQ(){
 function choose(btn,val,correct,cat){
   if(answered) return;
   answered=true;
+  const n = $('name').value.trim() || 'साथी';
   const fb=$('feedback');
   document.querySelectorAll('.option').forEach(b=>{
     b.disabled=true;
@@ -210,12 +207,13 @@ function choose(btn,val,correct,cat){
   });
   if(val===correct){
     right++; stats[cat].r++;
-    fb.className='feedback ok'; fb.textContent='✅ Correct! Well done.';
+    fb.className='feedback ok'; fb.textContent=`✅ स्याबस्!! ${n} पढ्दै छ केटाले`;
   } else {
     wrong++; stats[cat].w++;
     btn.classList.add('wrong');
-    fb.className='feedback no'; fb.textContent=`❌ Wrong. The correct answer is: ${correct}`;
+    fb.className='feedback no'; fb.textContent=`❌ ठुक्क मुजी ${n} यती पनि मिलाउदैनस्!! अलिक राम्रो सँग पढ्. and Try गर`;
   }
+  fb.classList.remove('hidden');
   $('cCount').textContent=`✔ Correct: ${right}`;
   $('wCount').textContent=`✘ Wrong: ${wrong}`;
   $('nextBtn').textContent = idx===qs.length-1 ? 'See Results ➜' : 'Next ➜';
